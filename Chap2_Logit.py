@@ -84,3 +84,7 @@ print(model.classes_)
 print(f"계수의 크기(특성 개수 4개) : {model.coef_.shape}")
 print(model.coef_)
 
+print(f"z절편값(분류 클래스의 개수=3)의 크기: "
+    f"{model.intercept_.shape}")
+print(model.intercept_)
+
