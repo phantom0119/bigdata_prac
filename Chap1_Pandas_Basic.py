@@ -74,11 +74,32 @@ print(tmpdf.loc[0:4, ['주구매상품', '주구매지점', '내점일수', '내
 """
 
 
-
+"""
 nadf = df[df['환불금액'].isnull() == True]
 nodf = df.dropna(axis=0, subset=['환불금액'], inplace=False)
 
 nodf.info()
+"""
+
+"""
+# 특정 Column 삭제
+print(df.columns, df.dtypes)
+newdf = df.drop(['내점일수', '내점당구매건수'], axis=1, inplace=False )
+print(newdf.columns, newdf.dtypes)
+"""
+
+
+
+# 특정 Column의 명칭 변경
+#df.rename(columns= {'내점일수' : '방문일수'}, inplace=True)
+
+# 특정 Row의 Index 값 변경
+df.rename(index= {0 : 'Changed_Index'}, inplace=True)
+print(df.head())
+
+
+
+
 
 
 
