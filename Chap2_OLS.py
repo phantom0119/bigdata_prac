@@ -19,6 +19,7 @@
 # ols = Ordinary Least Squares  (최소 제곱, 최소 자승)
 from statsmodels.formula.api import ols
 import pandas as pd
+import numpy as np
 
 dataset = pd.read_csv('./workpython/women.csv'
                       , index_col=0
@@ -113,3 +114,63 @@ fittedvalue = model.fittedvalues
 dtype: float64
 """
 
+# DataFrame 자료의 모든 독립변수에 대한 잔차(Residual) 출력.
+# Residual: 관측(실제)값 - 예측값   --> 값이 작을수록 설명력이 좋은 것.
+resid = model.resid
+#print(resid)
+"""
+1     2.416667
+2     0.966667
+3     0.516667
+4     0.066667
+5    -0.383333
+6    -0.833333
+7    -1.283333
+8    -1.733333
+9    -1.183333
+10   -1.633333
+11   -1.083333
+12   -0.533333
+13    0.016667
+14    1.566667
+15    3.116667
+dtype: float64
+"""
+
+#  DataFrame 자료의 모든 독립변수에 대한 상대오차(Relative Error) 출력.
+#  상대오차 = (잔차 / 실제값)의 절대값
+redf = pd.DataFrame(resid, columns=['residual'])
+
+# 모든 독립변수에 대한 상대오차 List 생성
+relerr = list()
+for idx, resiv in enumerate(resid):
+    #print(idx, round(resiv, 6), x.iloc[idx])
+    value = abs(resiv)/abs(y.iloc[idx])
+    #print(value)
+    relerr.append(value)
+
+relerr = np.array(relerr)
+redf['RelativeError'] = relerr
+redf['x'] = x
+redf['y'] = y
+
+
+#print(redf)
+"""
+    residual  RelativeError   x    y
+1   2.416667       0.021014  58  115
+2   0.966667       0.008262  59  117
+3   0.516667       0.004306  60  120
+4   0.066667       0.000542  61  123
+5  -0.383333       0.003042  62  126
+6  -0.833333       0.006460  63  129
+7  -1.283333       0.009722  64  132
+8  -1.733333       0.012840  65  135
+9  -1.183333       0.008513  66  139
+10 -1.633333       0.011502  67  142
+11 -1.083333       0.007420  68  146 
+12 -0.533333       0.003556  69  150
+13  0.016667       0.000108  70  154
+14  1.566667       0.009853  71  159
+15  3.116667       0.019004  72  164
+"""
