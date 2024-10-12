@@ -4,6 +4,7 @@ import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LinearRegression
+import lightgbm as  lgb
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, r2_score
@@ -267,12 +268,13 @@ X[col_list] = scaler.fit_transform(X[col_list])
 trainx, testx, trainy, testy = train_test_split(X, y, test_size=0.2, random_state=2024)
 
 
+"""
 # 선형 회귀 모델
 model = LinearRegression()
 model.fit(trainx, trainy)
 
 rdf = RandomForestRegressor(random_state=2024)
-rdf.fit(trainx, trainy)
+rdf.fittrainx, trainy)(
 
 
 # 예측
@@ -285,4 +287,74 @@ mse = mean_squared_error(testy, pred2)
 r2  = r2_score(testy, pred2)
 
 print(mse, r2, model.coef_)
+"""
+
+
+
+# 랜덤 포레스트 예측 모델
+model = RandomForestRegressor(random_state=2024)
+model.fit(trainx, trainy)
+
+#예측
+pred = model.predict(testx)
+
+mse = mean_squared_error(pred, testy)
+r2 = r2_score(pred, testy)
+
+print(mse, r2)
+
+
+
+# LGBM 회귀 모델
+# LGBM 적용을 위한 별도의 데이터셋 작업 필요
+lgbx_train = lgb.Dataset(trainx, label=trainy)
+lgbx_test  = lgb.Dataset(testx, label=testy)
+
+params = {
+    'objective' : 'regression',
+    'metric' : 'l2',
+    'boosting_type' : 'gbdt',
+    'learning_rate' : 0.1,
+    'num_leaves' : 31,
+    'max_depth' : -1,
+    'verbose' : -1
+}
+
+
+lgbm = lgb.train(params, lgbx_train, valid_sets=[lgbx_test],
+                 num_boost_round=100)
+
+
+lgb_pred = lgbm.predict(testx)
+lgbm_mse = mean_squared_error(testy, lgb_pred)
+lgbm_r2 = r2_score(testy, lgb_pred)
+
+print(lgbm_mse, lgbm_r2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
