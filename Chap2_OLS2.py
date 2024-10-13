@@ -97,6 +97,11 @@ print(newdf.head())
 # trainx, trainy, testx, testy = train_test_split(dfx, y, test_size=0.2, random_state=2024)
 
 model = ols('y ~ scaled_x', data=df).fit()
+
+fitted = model.fittedvalues
+
+#print(type(fitted))  # <class 'pandas.core.series.Series'>
+
 print(model.summary())
 
 
