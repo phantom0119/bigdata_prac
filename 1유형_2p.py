@@ -57,9 +57,6 @@ print("##################################################")
 
 
 
-
-
-
 """
 Q2.  1. 결측값이 제거된 Ozone 항목을 이용해 사분위수를 구한다.
      2. 상위 25% 이상, 하위 25% 이하의 값을 모두 0으로 대체한다.
@@ -96,6 +93,98 @@ mean_v = ndf['Ozone'].mean()
 std_v = ndf['Ozone'].std()
 
 print(mean_v, std_v)
+
+
+
+
+"""
+실기 도서 1유형 문제 1.
+ mtcars.csv
+"""
+df = pd.read_csv('workpython/mtcars.csv')
+df = df.sort_values(by=['mpg'], ascending=False)
+dfnew = df.head(10)
+
+mean_carb2 = dfnew[dfnew['carb'] == 2].hp.mean()
+mean_carb1 = dfnew[dfnew['carb'] == 1].hp.mean()
+
+#print(mean_carb1, mean_carb2, mean_carb2-mean_carb1)
+# 77.4 82.6 5.199999999999989
+
+"""
+실기 도서 1유형 문제 2.
+mtcars.csv
+"""
+df = pd.read_csv('workpython/mtcars.csv')
+newdf = df[df['am'] == 1]
+newdf_4 = newdf[newdf['cyl'] == 4]
+#print(newdf_4.mpg.mean(), newdf_4.hp.std(), newdf_4.mpg.mean()+newdf_4.hp.std())
+# 28.075 22.65541562503008 50.730415625030076
+
+
+"""
+실기 도서 1유형 문제 3.
+mtcars.csv
+"""
+newdf = df[df['am'] == 0]
+iqr = newdf['mpg'].quantile(0.75) - newdf['mpg'].quantile(0.25)
+meanv = round(newdf['mpg'].mean(), 3)
+
+rstdf = newdf[(newdf['mpg'] <= (meanv-iqr)) | (newdf['mpg'] >= (meanv+iqr))]
+m = rstdf.mpg.mean()
+cnt = rstdf.shape[0]
+
+#print(iqr, meanv)
+#print(rstdf.head(), m, cnt)
+# 18.483333333333334 6
+
+
+
+"""
+실기 도서 1유형 문제 1.
+ sklearn.datasets import load_iris
+"""
+from sklearn.datasets import load_iris
+iris = load_iris()
+df = pd.DataFrame(data=np.c_[iris['data'], iris['target']], columns=iris['feature_names']+['target'])
+
+print(df.columns)
+t = df['petal length (cm)'].mean() + df['petal length (cm)'].std()
+#print(t)
+# 5.5232982332594664
+
+#print(df['target'].unique())
+
+seto = df[df['target'] == 0]
+#print(seto.head())
+
+# min-max 수동식
+base = seto['petal length (cm)']
+#seto['minmax'] = (base-base.min(axis=0)) / (base.max(axis=0)-base.min(axis=0))
+
+#print(seto['minmax'].head())
+
+
+
+
+"""
+실기 도서 1유형 문제 2.
+sklearn.datasets import load_iris
+"""
+newdf = df[(df['target']==1) | (df['target']==2)]
+newdf = newdf.head(100)
+
+versi = newdf[newdf['target']==1]
+virgi = newdf[newdf['target']==2]
+
+versi_mid = versi['sepal length (cm)'].median()
+virgi_mid = virgi['petal length (cm)'].median()
+
+ve_cnt = versi[versi['sepal length (cm)'] >= versi_mid].shape[0]
+vi_cnt = virgi[virgi['petal length (cm)'] >= virgi_mid].shape[0]
+
+print(ve_cnt, vi_cnt, ve_cnt/versi.shape[0], vi_cnt/virgi.shape[0])
+
 
 
 
