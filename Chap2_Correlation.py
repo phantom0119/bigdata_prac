@@ -81,7 +81,8 @@ pearson[1] = pvalue (유의 확률)
 # t-statistic: 두 그룹 간 평균 차이가 얼마나 큰지 나타내는 통계량.
 #   두 그룹의 평균 차이가 표준 오차와 비교해 얼마나 큰지 나타낸다.
 # p-value: 귀무 가설을 기각할 수 있는지를 판단하는 척도.  일반적으로 0.05 미만이면 귀무 가설 기각.
-test = stats.ttest_ind(df['height'], df['weight'])
+# 두 그룹의 분산이 다르다고 판단했을 경우 equal_var = False 적용한다.
+test = stats.ttest_ind(df['height'], df['weight'], equal_var=True)
 print(test)
 """
 TtestResult(statistic=-17.222851136606238, pvalue=1.965846128991729e-16, df=28.0)

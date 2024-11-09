@@ -1,8 +1,31 @@
-# Pandas Datetime Type 활용  실습
+# Pandas Datetime Type 활용 실습
+# datetime 객체에서 문자열로 변환한다 : strftime  (String Format Time)
+# 문자열을 datetime 객체로 변환한다 : strptime (String Parse Time)
 
+# 일반적으로 표현되는 날짜에 대한 변환 적용하기
 import pandas as pd
 import numpy as np
 import datetime as dt
+
+test = pd.DataFrame({
+    '날짜' : ['2020.01.01', '2023-12-31', '2022-01-20 12:30:00']
+})
+
+# datetime 객체로 변환하기 위해 Pandas의 to_datetime() 적용 가능.
+# 여러 날짜 데이터 구조가 공존하는 경우에는 format을 "mixed"로 적용해 통합할 수 있다.
+test['chan'] = test.apply(lambda row: pd.to_datetime(test['날짜'], format="mixed"))
+
+# Datetime 데이터에서 각 부분별 값을 분리 추출하기
+test['year'] = test.chan.dt.year
+test['month'] = test.chan.dt.month
+test['day'] = test.chan.dt.day
+test['hour'] = test.chan.dt.hour
+test['minute'] = test.chan.dt.minute
+test['second'] = test.chan.dt.second
+
+print(test)
+
+"""
 
 df = pd.read_csv('workpython/air_pollution_data.csv', encoding='euc-kr'
                  , header=0, index_col=0)
@@ -42,6 +65,9 @@ print(f"마이크로초: {time.microsecond}")
 print(f"요일 반환 (월:0, 화:1, 수:2 ... 일:6): {time.weekday}")
 print(f"문자열로 반환: {time.strftime}")
 
+"""
+
+
 # 특정 형식으로 문자열 변환
 """
 %A: 요일 (Monday, Tuesday, Wednesday, Thursday...)
@@ -57,6 +83,10 @@ print(f"문자열로 반환: {time.strftime}")
 %I: 12시간 형식 시 (01, 02...12)
 %p: 오전/오후  (AM/PM)
 """
+
+
+"""
+
 print("-----------------------------------------------------------------")
 print(f"datetime을 문자열 구조로 변환= {time.strftime("%p %I:%M:%S")}")
 text_time = time.strftime("%p %I:%M:%S")
@@ -69,4 +99,6 @@ print(f"{type(changed_time)}")
 
 print(f"날짜만 출력하는 date class: {time.date()}")
 print(f"시간만 출력하는 time class: {time.time()}")
+
+"""
 

@@ -5,6 +5,7 @@ import numpy as np
 df = pd.read_csv('workpython/sale.csv', encoding='euc-kr',
                  header=0, index_col=0 )
 
+## 데이터프레임의 주요 정보를 확인할 수 있는 함수(Method)와 속성(Attribute)
 #df.info()
 #print(df.describe(include='object'))
 #print(df.describe())
