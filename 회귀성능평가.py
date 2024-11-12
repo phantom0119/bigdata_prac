@@ -79,21 +79,59 @@ trainx, testx, trainy, testy = train_test_split(scaled_x, y, test_size=0.3, rand
 model = LinearRegression()
 model.fit(trainx, trainy)
 
+# 예측값
 pred = model.predict(testx)
 
-mse = mean_squared_error(pred, testy)
-rmse = np.sqrt(mse)
-mae = mean_absolute_error(pred, testy)
-mape = mean_absolute_percentage_error(pred, testy)
+
+# 1. r2-Score
+# sklearn의 r2는 항상  "1 - sse/sst"로 계산한다.
 r2 = r2_score(testy, pred)
 
-print(mse, mae, r2)
+sse = np.sum( (testy - pred)**2 )
+ssr = np.sum( (pred - np.mean(testy))**2 )
+sst = np.sum( (testy - np.mean(testy))**2 )
+print(sse)
+print(ssr)
+print(sst)
+print(1-sse/sst)
+print(r2)
 
 
-# MSE 성능 지표를 계산하는 다양한 방법
+# 2. MSE (Mean Squared Error)
+mse = mean_squared_error(pred, testy)
+mse2 =  np.mean((testy - pred) ** 2)
+print(mse)
+print(mse2)
+
+
+# 3. RMSE (Root Mean Squared Error)
 rmse = np.sqrt(mse)
-rmse2 = np.sqrt(((testy-pred)**2).mean())
-rmse3 = mean_squared_error( testy, pred, squared=False )
-print(rmse, rmse2, rmse3)
+rmse2 = mse ** 0.5
+rmse3 = mean_squared_error(testy, pred, squared=False )
+print(rmse)
+print(rmse2)
+print(rmse3)
 
 
+# 4. MAE (Mean Absolute Error)
+mae = mean_absolute_error(testy, pred)
+mae2 = np.mean(np.abs(testy-pred))
+print(mae)
+print(mae2)
+
+
+# 5. MAPE (Mean Absolute Percentage Error)
+mape = mean_absolute_percentage_error(testy, pred)
+mape2 = np.mean(np.abs((testy-pred)/testy))
+print(mape)
+print(mape2)
+
+
+
+# # MSE 성능 지표를 계산하는 다양한 방법
+# rmse = np.sqrt(mse)
+# rmse2 = np.sqrt(((testy-pred)**2).mean())
+# rmse3 = mean_squared_error( testy, pred, squared=False )
+# print(rmse, rmse2, rmse3)
+#
+#
