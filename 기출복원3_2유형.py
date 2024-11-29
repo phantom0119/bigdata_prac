@@ -1,60 +1,51 @@
-# 제 5회 기출 복원 2유형 연습
+# 제 3회 기출 복원 2유형 연습
 
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
+from sklearn.datasets import load_iris
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, roc_curve, roc_auc_score
 
-df = pd.read_csv('./workpython/carprice.csv')
-df.info()
+iris = load_iris()
+x = iris.data
+y = iris.target
 
-"""
-문제
-차량 가격을 예측
-"""
-y = df['price']
+#print(x, y)  # y값은 [0, 1, 2]
 
-#print(df['model'].unique())
-#print(df['fuelType'].unique())
-"""
-[' A1' ' A6' ' A4' ' A3' ' Q3' ' Q5' ' A5' ' S4' ' Q2' ' A7' ' TT' ' Q7'
- ' RS6' ' RS3' ' A8' ' Q8' ' RS4' ' RS5' ' R8' ' SQ5' ' S8' ' SQ7' ' S3'
- ' S5' ' A2' ' RS7']
-['Petrol' 'Diesel' 'Hybrid']
-"""
+scaler = StandardScaler()
+scaled_x = scaler.fit_transform(x)
 
-newdf = df.copy()
-newdf['model'] = newdf['model'].astype('category')
-newdf['fuelType'] = newdf['fuelType'].astype('category')
-newdf['transmission'] = newdf['transmission'].astype('category')
 
-encoder = LabelEncoder()
+X_train, X_test, y_train, y_test = train_test_split(scaled_x, y, test_size=0.3, random_state=100)
 
-newdf['model'] = encoder.fit_transform(newdf['model'])
-newdf['fuelType'] = encoder.fit_transform(newdf['fuelType'])
-newdf['transmission'] = encoder.fit_transform(newdf['transmission'])
+model = DecisionTreeClassifier()
+model.fit(X_train, y_train)
 
-#print(newdf['model'].unique())
-#print(newdf['fuelType'].unique())
-"""
-[ 0  5  3  2  9 10  4 20  8  6 25 11 17 14  7 12 15 16 13 23 22 24 19 21 1 18]
-[2 0 1]
-"""
-corr_table = newdf[['model', 'year', 'transmission', 'mileage', 'fuelType', 'tax'
-                    ,'mpg' ,'engineSize', 'price']].corr()
+pred = model.predict(X_test)
 
-print(corr_table['price'])
-"""
-model           0.394635
-year            0.592581
-transmission    0.009864
-mileage        -0.535357
-fuelType       -0.032135
-tax             0.356157
-mpg            -0.600334
-engineSize      0.591262
-price           1.000000
-"""
+pred_set = pd.DataFrame( {
+        'predict' : pred,
+        'actual' : y_test
+})
+
+y_pred_proba = model.predict_proba(X_test)[:, 1]
+
+print(pred_set)
+
+print(classification_report(y_test, pred))
+print(confusion_matrix(y_test, pred))
+print(accuracy_score(y_test, pred))
+
+
+model2 = SVC(kernel='sigmoid', random_state=100)
+model2.fit(X_train, y_train)
+pred2 = model2.predict(X_test)
+
+print(confusion_matrix(pred, y_test))
+
 
 
 

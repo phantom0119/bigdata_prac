@@ -24,3 +24,15 @@ comp = (df['ratio'] > 0.04) & (df['ratio'] < 0.05)
 newdf = df[(df['category_id'] == 10) & (comp)]
 
 print(len(newdf))
+
+
+
+#----------------------------------------------------
+
+
+df = pd.read_csv('./workpython/netflixutf.csv')
+print(df['date_added'].head() )
+
+cond1 = (df['date_added'] >= '2021-07-01') & (df['date_added'] <= '2021-08-31')
+
+print(len(df[ (cond1) & (df['country'] == 'United Kingdom')]))
