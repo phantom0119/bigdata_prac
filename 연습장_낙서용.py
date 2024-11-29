@@ -4,6 +4,7 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
+from sklearn.datasets import load_breast_cancer
 
 # 1. 샘플 데이터 생성
 data = pd.DataFrame({
@@ -50,3 +51,6 @@ new_predictions = model.predict(new_colors_encoded)
 print("\n새로운 데이터 예측:")
 for color, pred in zip(new_colors.ravel(), new_predictions):
     print(f"색상: {color}, 예측: {pred}")
+
+
+
